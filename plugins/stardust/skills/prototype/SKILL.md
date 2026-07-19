@@ -210,7 +210,14 @@ to the compose path silently.
    capture from the same calendar day.
 3. Copy the capture to
    `stardust/prototypes/<slug>-proposed.html`. The capture stays
-   pristine as the before for the invariant gate.
+   pristine as the before for the invariant gate and the
+   remnant counts. Then strip the style layer mechanically from
+   the working copy: remove every `<style>` block and every
+   stylesheet `<link>` tag (a short python/node one-liner is
+   fine), leaving markup, scripts, inline `style=` attributes,
+   and non-stylesheet links intact. Craft starts from the naked
+   document; remodel R3's strip step becomes a verification,
+   not a discretion.
 4. Invoke `$impeccable craft stardust/prototypes/<slug>-proposed.html`
    with the resolved direction (DESIGN.md / DESIGN.json, plus
    direction.md § Anti-references and § Divergence inputs as hard
@@ -233,10 +240,15 @@ to the compose path silently.
 5. Run the invariant gate when available:
    `node <impeccable-remodel-clone>/scripts/remodel-check.mjs stardust/current/pages/<slug>.html stardust/prototypes/<slug>-proposed.html`
    must report 0 immutable violations (ids, `data-*`, `aria-*`,
-   form names, scripts, template markers). The script ships with
-   the remodeled impeccable (its fork clone's `scripts/`); if not
-   found, print a warning and continue — craft's own per-pass
-   invariant self-check still applies.
+   form names, scripts, template markers). The zero-remnants
+   check is deterministic as well: none of the capture's
+   `<style>` blocks or stylesheet `<link>` tags survive into the
+   proposed file; the only style layer present is craft's
+   rebuilt one plus any re-declared font/icon links. If any
+   source CSS survives, the run fails here regardless of visual
+   quality. The script ships with the remodeled impeccable (its
+   fork clone's `scripts/`); if not found, print a warning and
+   continue.
 6. Quality gates (Phases 2.5–2.8), Phase 4, and Phase 5 run
    unchanged. State bookkeeping is stock.
 

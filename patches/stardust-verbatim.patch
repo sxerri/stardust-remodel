@@ -61,10 +61,10 @@ index 5c367c6..9a13df6 100644
    or the inherited palette with role-renaming. Role names must
    satisfy toolkit § 4 (brand-native, no `Primary` / `Secondary` /
 diff --git a/plugins/stardust/skills/prototype/SKILL.md b/plugins/stardust/skills/prototype/SKILL.md
-index 4098404..7843498 100644
+index 4098404..383afdf 100644
 --- a/plugins/stardust/skills/prototype/SKILL.md
 +++ b/plugins/stardust/skills/prototype/SKILL.md
-@@ -175,10 +175,103 @@ Stardust's job inside Phase 2 is therefore:
+@@ -175,10 +175,115 @@ Stardust's job inside Phase 2 is therefore:
  The proposed file is whatever craft writes plus the validation
  report; it is not stardust's authored artifact.
  
@@ -103,7 +103,14 @@ index 4098404..7843498 100644
 +   capture from the same calendar day.
 +3. Copy the capture to
 +   `stardust/prototypes/<slug>-proposed.html`. The capture stays
-+   pristine as the before for the invariant gate.
++   pristine as the before for the invariant gate and the
++   remnant counts. Then strip the style layer mechanically from
++   the working copy: remove every `<style>` block and every
++   stylesheet `<link>` tag (a short python/node one-liner is
++   fine), leaving markup, scripts, inline `style=` attributes,
++   and non-stylesheet links intact. Craft starts from the naked
++   document; remodel R3's strip step becomes a verification,
++   not a discretion.
 +4. Invoke `$impeccable craft stardust/prototypes/<slug>-proposed.html`
 +   with the resolved direction (DESIGN.md / DESIGN.json, plus
 +   direction.md § Anti-references and § Divergence inputs as hard
@@ -126,10 +133,15 @@ index 4098404..7843498 100644
 +5. Run the invariant gate when available:
 +   `node <impeccable-remodel-clone>/scripts/remodel-check.mjs stardust/current/pages/<slug>.html stardust/prototypes/<slug>-proposed.html`
 +   must report 0 immutable violations (ids, `data-*`, `aria-*`,
-+   form names, scripts, template markers). The script ships with
-+   the remodeled impeccable (its fork clone's `scripts/`); if not
-+   found, print a warning and continue — craft's own per-pass
-+   invariant self-check still applies.
++   form names, scripts, template markers). The zero-remnants
++   check is deterministic as well: none of the capture's
++   `<style>` blocks or stylesheet `<link>` tags survive into the
++   proposed file; the only style layer present is craft's
++   rebuilt one plus any re-declared font/icon links. If any
++   source CSS survives, the run fails here regardless of visual
++   quality. The script ships with the remodeled impeccable (its
++   fork clone's `scripts/`); if not found, print a warning and
++   continue.
 +6. Quality gates (Phases 2.5–2.8), Phase 4, and Phase 5 run
 +   unchanged. State bookkeeping is stock.
 +
@@ -168,7 +180,7 @@ index 4098404..7843498 100644
  For each page in scope:
  
  1. Read `stardust/current/pages/<slug>.json` for the page's structure
-@@ -393,6 +486,10 @@ instance).
+@@ -393,6 +498,10 @@ instance).
  
  ### Phase 2 — Render the proposed page
  

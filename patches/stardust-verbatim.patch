@@ -1,0 +1,101 @@
+diff --git a/plugins/stardust/skills/prototype/SKILL.md b/plugins/stardust/skills/prototype/SKILL.md
+index 4098404..d5fbaa9 100644
+--- a/plugins/stardust/skills/prototype/SKILL.md
++++ b/plugins/stardust/skills/prototype/SKILL.md
+@@ -175,10 +175,85 @@ Stardust's job inside Phase 2 is therefore:
+ The proposed file is whatever craft writes plus the validation
+ report; it is not stardust's authored artifact.
+ 
++### Remodel mode (verbatim IA)
++
++When the resolved direction pins the information architecture
++verbatim — `DESIGN.json.extensions.iaPriorities[]` is present and
++every entry has `mutability: "locked"` (the stamp `direct` writes
++for "same IA, swap the surface" directions) — the stock compose
++path is wrong for the run: the current page's rendered HTML is the
++canonical document, and the redesign must preserve its structure,
++IDs, accessibility hooks, analytics attributes, and integrations.
++Prototype switches to **remodel mode** for every page in scope.
++
++**Detection (Setup step 7).** After Setup step 6, read
++`DESIGN.json.extensions.iaPriorities`. If present and every entry
++has `mutability: "locked"`, set remodel mode and surface
++`Remodel mode: verbatim IA pinned by direction`. Otherwise
++continue stock. Remodel mode requires a remodeled impeccable
++(the impeccable skill ships `reference/remodel.md`, e.g. the
++impeccable-remodel fork build); if absent, stop and recommend
++installing it — stock craft regenerates from scratch and would
++destroy the hooks this mode exists to preserve. Do not fall back
++to the compose path silently.
++
++**Flow (replaces Phases 1–2 for the run):**
++
++1. Skip the page-shape brief and `$impeccable shape` — structure
++   is fixed by the source document.
++2. Lazy-capture the canonical markup: playwright `page.content()`
++   of the page record's `url` from `stardust/state.json`, written
++   to `stardust/current/pages/<slug>.html`. Reuse an existing
++   capture from the same calendar day.
++3. Copy the capture to
++   `stardust/prototypes/<slug>-proposed.html`. The capture stays
++   pristine as the before for the invariant gate.
++4. Invoke `$impeccable craft stardust/prototypes/<slug>-proposed.html`
++   with the resolved direction (DESIGN.md / DESIGN.json, plus
++   direction.md § Anti-references and § Divergence inputs as hard
++   constraints) as the brief. Craft's remodel detection fires on
++   the HTML file target and edits in place.
++5. Run the invariant gate when available:
++   `node <impeccable-remodel-clone>/scripts/remodel-check.mjs stardust/current/pages/<slug>.html stardust/prototypes/<slug>-proposed.html`
++   must report 0 immutable violations (ids, `data-*`, `aria-*`,
++   form names, scripts, template markers). The script ships with
++   the remodeled impeccable (its fork clone's `scripts/`); if not
++   found, print a warning and continue — craft's own per-pass
++   invariant self-check still applies.
++6. Quality gates (Phases 2.5–2.8), Phase 4, and Phase 5 run
++   unchanged. State bookkeeping is stock.
++
++**Contract deltas from `reference/proposed-file-shell.md`**
++(remodel mode only):
++
++- Self-containment: relaxed. The source document's existing
++  external references (CSS, JS, fonts, CMS assets) are preserved,
++  not inlined. New CSS craft adds lives in an embedded `<style>`
++  or in edits to existing referenced stylesheets.
++- Provenance block: emitted as an HTML comment at the top of
++  `<head>`, not a DOM element (zero-churn provenance).
++- Structural data attributes: additive-only — never rename, strip,
++  or reorder existing attributes; required stardust data
++  attributes are added where absent.
++- `:root` token block: still required; craft adds it in the
++  embedded style surface.
++- Content sourcing: the source HTML is the strongest provenance
++  tier — every literal must trace to the source document or a
++  direction-authorised change; anything else carries the
++  placeholder signature. The scan runs against the capture, not
++  `pages/<slug>.json`.
++- Structure: DOM hierarchy, IDs, existing `data-*` / `aria-*`,
++  form names, event hooks, and scripts are immutable (enforced by
++  craft's remodel invariants plus the gate in step 5).
++
+ ## Procedure
+ 
+ ### Phase 1 — Plan the prototype (page-shape brief)
+ 
++When remodel mode is active (§ Remodel mode (verbatim IA) under
++Delegation mechanic), skip Phases 1–2 as written and follow that
++subsection's flow instead; resume at the quality gates (Phase 2.5).
++
+ For each page in scope:
+ 
+ 1. Read `stardust/current/pages/<slug>.json` for the page's structure
+@@ -393,6 +468,10 @@ instance).
+ 
+ ### Phase 2 — Render the proposed page
+ 
++In remodel mode this phase is replaced by the flow in § Remodel
++mode (verbatim IA); the contract deltas there override the hard
++requirements below where they conflict.
++
+ Render `stardust/prototypes/<slug>-proposed.html` per
+ `reference/proposed-file-shell.md` § Required structure. Hard
+ requirements there:

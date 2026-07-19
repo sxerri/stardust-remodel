@@ -190,7 +190,10 @@ Prototype switches to **remodel mode** for every page in scope.
 `DESIGN.json.extensions.iaPriorities`. If present and every entry
 has `mutability: "locked"`, set remodel mode and surface
 `Remodel mode: verbatim IA pinned by direction`. Otherwise
-continue stock. Remodel mode requires a remodeled impeccable
+continue stock. When remodel mode is set, also read
+`DESIGN.json.extensions.surfaceFidelity`: the value `evolved`
+activates the evolved-surface contract for the run (flow step 4).
+Remodel mode requires a remodeled impeccable
 (the impeccable skill ships `reference/remodel.md`, e.g. the
 impeccable-remodel fork build); if absent, stop and recommend
 installing it — stock craft regenerates from scratch and would
@@ -212,7 +215,15 @@ to the compose path silently.
    with the resolved direction (DESIGN.md / DESIGN.json, plus
    direction.md § Anti-references and § Divergence inputs as hard
    constraints) as the brief. Craft's remodel detection fires on
-   the HTML file target and edits in place.
+   the HTML file target and edits in place. When
+   `surfaceFidelity: "evolved"` is stamped, the brief must also
+   point at the extracted current design system
+   (`stardust/current/DESIGN.md`,
+   `stardust/current/_brand-extraction.json`) and state that
+   craft's remodel surface contract (impeccable
+   `reference/remodel.md` § Surface contract) governs: anchors
+   from the source system, every visual decision traces, no new
+   design language.
 5. Run the invariant gate when available:
    `node <impeccable-remodel-clone>/scripts/remodel-check.mjs stardust/current/pages/<slug>.html stardust/prototypes/<slug>-proposed.html`
    must report 0 immutable violations (ids, `data-*`, `aria-*`,

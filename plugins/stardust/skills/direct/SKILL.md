@@ -204,6 +204,31 @@ IA fidelity …"* — to stay within the two-question ceiling. If
 resolving register (brand vs product) is also outstanding, prioritise
 register first; defer one of density / ia-fidelity to the next turn.
 
+#### Surface-fidelity (phrase-pinned, never a question)
+
+A third axis, resolved from the phrase only; it never spends a
+follow-up question (the two-question ceiling belongs to density and
+ia-fidelity).
+
+- **evolved** when the phrase contains *"refine the surface"*,
+  *"keep our look"*, *"keep our design"*, *"modernize our design"*,
+  *"evolve the design"*, or *"same design"*: modernize within the
+  site's existing design language.
+- **reimagined** otherwise, including explicit new-surface phrases
+  (*"new look"*, *"rebrand"*, *"fresh design"*, *"swap the
+  surface"*). This is the default; stamp `surface-fidelity:
+  reimagined (default)` when nothing pinned it.
+
+Stamp in `direction.md` § Movements as `surface-fidelity: <tier>`
+and propagate to `DESIGN.json.extensions.surfaceFidelity` in
+Phase 4. Downstream readers: `prototype`'s remodel branch and
+impeccable's remodel surface contract. The interaction with
+ia-fidelity matters: *"same IA, swap the surface"* pins
+ia-fidelity verbatim + surface-fidelity reimagined (structure
+kept, design replaced); *"same IA, refine the surface"* pins
+verbatim + evolved (structure kept, design modernized within
+itself).
+
 Wait for the user's confirmation (`"go"`, or a correction to the
 plan) before moving on.
 
@@ -922,6 +947,25 @@ purpose / position-class but no literal copy or dimensions) and let
 each page's shape brief specify the deployment.
 
 Token sources:
+
+**When `surface-fidelity: evolved`, token sources change.** Derive
+`colors`, `typography`, `rounded`, and the component vocabulary
+from the extracted current design system
+(`stardust/current/DESIGN.md` and
+`stardust/current/_brand-extraction.json`), not from palette picks
+or a new font deck, and apply only the modernization brief:
+type-scale normalization to the resolved ratio floor, OKLCH
+contrast repair, spacing-rhythm normalization (4pt base,
+`sectionPadding` from the density stamp), token hygiene
+(dedupe/alias cleanup), and component-consistency repair. Every
+token in DESIGN.json must trace to a source-system value or a
+brief item; record the mapping in
+`DESIGN.json.extensions.surfaceEvolution[]` (token, source value,
+brief item applied). New hue families, new type families, and new
+component vocabulary are out of bounds. Positioning stays
+light-touch in this mode: Phase 3 records no repositioning. When
+`surface-fidelity: reimagined` (the default), the sources below
+apply unchanged.
 
 - **`colors`** — from the picked palette (palette-picker.md output)
   or the inherited palette with role-renaming. Role names must

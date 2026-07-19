@@ -224,6 +224,12 @@ to the compose path silently.
    `reference/remodel.md` § Surface contract) governs: anchors
    from the source system, every visual decision traces, no new
    design language.
+   The style layer is a ground-up rebuild, not an overlay: per
+   remodel R3, craft strips the source `<style>` blocks and
+   stylesheet `<link>` tags, inventories selectors from the
+   preserved DOM, and authors one coherent stylesheet. Original
+   screenshots under `stardust/current/assets/screenshots/` are
+   the visual anchors for iteration (remodel R4 same-site test).
 5. Run the invariant gate when available:
    `node <impeccable-remodel-clone>/scripts/remodel-check.mjs stardust/current/pages/<slug>.html stardust/prototypes/<slug>-proposed.html`
    must report 0 immutable violations (ids, `data-*`, `aria-*`,
@@ -237,10 +243,11 @@ to the compose path silently.
 **Contract deltas from `reference/proposed-file-shell.md`**
 (remodel mode only):
 
-- Self-containment: relaxed. The source document's existing
-  external references (CSS, JS, fonts, CMS assets) are preserved,
-  not inlined. New CSS craft adds lives in an embedded `<style>`
-  or in edits to existing referenced stylesheets.
+- Self-containment: the proposed file's CSS is self-contained by
+  construction. The source document's own `<style>` blocks and
+  stylesheet links are stripped and replaced by one rebuilt style
+  layer (remodel R3). Other external references (JS, fonts, CMS
+  assets) are preserved, not inlined.
 - Provenance block: emitted as an HTML comment at the top of
   `<head>`, not a DOM element (zero-churn provenance).
 - Structural data attributes: additive-only — never rename, strip,

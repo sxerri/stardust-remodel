@@ -229,6 +229,25 @@ kept, design replaced); *"same IA, refine the surface"* pins
 verbatim + evolved (structure kept, design modernized within
 itself).
 
+#### Style strategy (phrase-pinned, never a question)
+
+How the style layer changes, resolved from the phrase only:
+- **overlay** (experimental) when the phrase calls for a
+  low-impact re-theme: *"minor tweaks"*, *"low impact"*,
+  *"re-theme"*, *"light touch"*, *"within our brand
+  guidelines"*. Auto-pins `surface-fidelity: evolved` — a
+  re-theme within brand guidelines is evolved by definition.
+  The source CSS stays; change arrives as declared tweaks plus
+  one additive overlay block (impeccable remodel R3-B).
+- **rebuild** otherwise (the default): the old style layer is
+  stripped and a new stylesheet is authored from the ground up
+  (remodel R3-A).
+
+Stamp `direction.md` § Movements as `style-strategy: <tier>`
+and propagate to `DESIGN.json.extensions.styleStrategy`.
+`prototype`'s remodel branch reads it: rebuild strips at copy
+time; overlay preserves the source CSS.
+
 Wait for the user's confirmation (`"go"`, or a correction to the
 plan) before moving on.
 

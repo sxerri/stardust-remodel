@@ -193,6 +193,8 @@ has `mutability: "locked"`, set remodel mode and surface
 continue stock. When remodel mode is set, also read
 `DESIGN.json.extensions.surfaceFidelity`: the value `evolved`
 activates the evolved-surface contract for the run (flow step 4).
+And read `DESIGN.json.extensions.styleStrategy` (default
+`rebuild`): it selects the style-layer path for steps 3–5.
 Remodel mode requires a remodeled impeccable
 (the impeccable skill ships `reference/remodel.md`, e.g. the
 impeccable-remodel fork build); if absent, stop and recommend
@@ -211,13 +213,16 @@ to the compose path silently.
 3. Copy the capture to
    `stardust/prototypes/<slug>-proposed.html`. The capture stays
    pristine as the before for the invariant gate and the
-   remnant counts. Then strip the style layer mechanically from
-   the working copy: remove every `<style>` block and every
-   stylesheet `<link>` tag (a short python/node one-liner is
-   fine), leaving markup, scripts, inline `style=` attributes,
-   and non-stylesheet links intact. Craft starts from the naked
-   document; remodel R3's strip step becomes a verification,
-   not a discretion.
+   remnant counts. Under `styleStrategy: rebuild` (the default),
+   strip the style layer mechanically from the working copy:
+   remove every `<style>` block and every stylesheet `<link>`
+   tag (a short python/node one-liner is fine), leaving markup,
+   scripts, inline `style=` attributes, and non-stylesheet
+   links intact; craft starts from the naked document and
+   remodel R3-A's strip step becomes a verification. Under
+   `styleStrategy: overlay`, skip the strip: the source CSS
+   stays and craft works per remodel R3-B (declared tweaks plus
+   one overlay block).
 4. Invoke `$impeccable craft stardust/prototypes/<slug>-proposed.html`
    with the resolved direction (DESIGN.md / DESIGN.json, plus
    direction.md § Anti-references and § Divergence inputs as hard
@@ -240,15 +245,17 @@ to the compose path silently.
 5. Run the invariant gate when available:
    `node <impeccable-remodel-clone>/scripts/remodel-check.mjs stardust/current/pages/<slug>.html stardust/prototypes/<slug>-proposed.html`
    must report 0 immutable violations (ids, `data-*`, `aria-*`,
-   form names, scripts, template markers). The zero-remnants
-   check is deterministic as well: none of the capture's
-   `<style>` blocks or stylesheet `<link>` tags survive into the
-   proposed file; the only style layer present is craft's
-   rebuilt one plus any re-declared font/icon links. If any
-   source CSS survives, the run fails here regardless of visual
-   quality. The script ships with the remodeled impeccable (its
-   fork clone's `scripts/`); if not found, print a warning and
-   continue.
+   form names, scripts, template markers). The remnant check is
+   deterministic as well and depends on the strategy: under
+   `rebuild`, none of the capture's `<style>` blocks or
+   stylesheet `<link>` tags survive (the only style layer
+   present is craft's rebuilt one plus any re-declared
+   font/icon links); under `overlay`, all of them survive
+   intact alongside exactly one new overlay block, and direct
+   tweaks match the declared list. A remnant mismatch fails the
+   run here regardless of visual quality. The script ships with
+   the remodeled impeccable (its fork clone's `scripts/`); if
+   not found, print a warning and continue.
 6. Quality gates (Phases 2.5–2.8), Phase 4, and Phase 5 run
    unchanged. State bookkeeping is stock.
 

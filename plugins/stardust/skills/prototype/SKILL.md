@@ -213,8 +213,23 @@ to the compose path silently.
 3. Copy the capture to
    `stardust/prototypes/<slug>-proposed.html`. The capture stays
    pristine as the before for the invariant gate and the
-   remnant counts. Under `styleStrategy: rebuild` (the default),
-   strip the style layer mechanically from the working copy:
+   remnant counts. Then make the working copy viewable: inject
+   `<base href="{origin}">` (origin from the page record's `url`)
+   as the first child of `<head>` in the COPY — never the
+   pristine capture. Captures carry root-relative asset URLs
+   (`/etc/clientlibs/...`, `/content/dam/...`) that resolve to
+   `file:///etc/...` and silently die when the file is opened
+   locally; the base tag re-roots them to the live origin.
+   Additive only, no source attribute touched. This applies to
+   both style strategies (rebuild and overlay). Caveats for the
+   run log: viewing requires network; same-page anchors
+   (`#main`) rebase to the origin. The tag is review
+   scaffolding only: strip it from the proposed file at
+   handoff to diff/migrate/deploy, so production URLs
+   never re-root to the legacy origin. Under
+   `styleStrategy: rebuild`
+   (the default), strip the style layer mechanically from the
+   working copy:
    remove every `<style>` block and every stylesheet `<link>`
    tag (a short python/node one-liner is fine), leaving markup,
    scripts, inline `style=` attributes, and non-stylesheet
